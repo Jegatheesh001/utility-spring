@@ -25,7 +25,7 @@ public class NameHandler extends TextWebSocketHandler {
 		for (WebSocketSession webSocketSession : sessions) {
 			@SuppressWarnings("unchecked")
 			Map<String, Object> value = new Gson().fromJson(message.getPayload(), Map.class);
-			webSocketSession.sendMessage(new TextMessage("Hello " + value.get("name") + " !"));
+			webSocketSession.sendMessage(new TextMessage(value.get("name") + " is Online !!!"));
 		}
 	}
 
