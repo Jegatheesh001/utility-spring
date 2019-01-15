@@ -31,4 +31,10 @@ public class ToolsController {
 	public String importDataFromExcel(@PathVariable(name = "filePath") String filePath) {
 		return toolsService.logicForImportDataFromExcel(filePath);
 	}
+	
+	@Loggable
+	@RequestMapping(method = RequestMethod.GET, value = "/readSQLFromFolder")
+	public String readSQLFromFolder() {
+		return toolsService.logicToReadSQLFromFolder("\\\\192.168.0.135\\Shared_D\\KNG-Team\\Sap-DB\\SAP_DB");
+	}
 }
