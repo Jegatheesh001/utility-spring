@@ -35,6 +35,6 @@ public class ToolsController {
 	@Loggable
 	@RequestMapping(method = RequestMethod.GET, value = "/readSQLFromFolder")
 	public String readSQLFromFolder() {
-		return toolsService.logicToReadSQLFromFolder("\\\\192.168.0.135\\Shared_D\\KNG-Team\\Sap-DB\\SAP_DB");
+		return toolsService.logicToReadSQLFromFolder("D:\\MyShareFolder\\SAP_DB");
 	}
 }

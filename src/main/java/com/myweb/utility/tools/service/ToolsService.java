@@ -9,7 +9,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -83,6 +85,7 @@ public class ToolsService {
 	}
 
 	public String logicToReadSQLFromFolder(String folderPath) {
+		linesWrited = 0;
 		File folder = new File(folderPath);
 		for (final File fileEntry : folder.listFiles()) {
 			if (!fileEntry.isDirectory()) {
@@ -94,6 +97,7 @@ public class ToolsService {
 				}
 			}
 		}
+		System.out.println("Total Records : " + linesWrited);
 		return null;
 	}
 
@@ -104,15 +108,50 @@ public class ToolsService {
 			Files.lines(path, StandardCharsets.UTF_8).forEach(line -> {
 				lines.add(line);
 			});
-			writeToFile(lines, folderPath, extension);
+			fileFiter(lines, folderPath, extension, true);
 			System.out.println("Records : " + lines.size());
 		}
 		return null;
 	}
+	
+	long linesWrited = 0;
+	long linesPerFile = 65000;
+	String fileName;
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
+	private void fileFiter(List<String> lines, String folderPath, String extension, boolean seperateFiles) {
+		long currentLoad = lines.size();
+		String fileBeg = "test_";
+		if (currentLoad > 0) {
+			if (!seperateFiles) {
+				linesWrited += currentLoad;
+				if (fileName == null)
+					fileName = fileBeg + sdf.format(new Date());
+				writeToFile(lines, folderPath, extension, fileName);
+			} else {
+				long lastFileLines = linesWrited % linesPerFile;
+				int fromIndex = 0;
+				int toIndex = 0;
+				while (currentLoad > 0) {
+					if (lastFileLines == 0)
+						fileName = fileBeg + sdf.format(new Date()) + "_" + currentLoad;
+					if ((lastFileLines + currentLoad) > linesPerFile)
+						toIndex = (int) (linesPerFile - lastFileLines);
+					else
+						toIndex = (int) currentLoad;
+					System.out.println(fileName + " index : " + fromIndex + " to " + (fromIndex + toIndex));
+					writeToFile(lines.subList(fromIndex, fromIndex + toIndex), folderPath, extension, fileName);
+					lastFileLines = 0;
+					linesWrited += toIndex;
+					currentLoad -= toIndex;
+					fromIndex += toIndex;
+				}
+			}
+		}
+	}
 
-	public String writeToFile(List<String> lines, String folderPath, String extension) {
+	public String writeToFile(List<String> lines, String folderPath, String extension, String fileName) {
 		if (lines.size() > 0) {
-			try (BufferedWriter bw = new BufferedWriter(new FileWriter(folderPath + "/op/outputfile." + extension, true))) {
+			try (BufferedWriter bw = new BufferedWriter(new FileWriter(folderPath + "/op/" + fileName + "." + extension, true))) {
 				for (String line : lines) {
 					bw.write(line);
 					bw.newLine();
