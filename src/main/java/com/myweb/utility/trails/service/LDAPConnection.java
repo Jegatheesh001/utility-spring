@@ -1,4 +1,4 @@
-package com.myweb.utility.tools.service;
+package com.myweb.utility.trails.service;
 
 import java.util.Collections;
 import java.util.Hashtable;
@@ -6,7 +6,9 @@ import java.util.Hashtable;
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
+import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
+import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
@@ -28,7 +30,8 @@ public class LDAPConnection {
 			ldapEnv.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
 			ldapEnv.put(Context.PROVIDER_URL, "ldap://ldap.forumsys.com:389");
 			ldapEnv.put(Context.SECURITY_AUTHENTICATION, "simple");
-			// ldapEnv.put(Context.SECURITY_PRINCIPAL, "cn=administrateur,cn=users,dc=societe,dc=fr");
+			// ldapEnv.put(Context.SECURITY_PRINCIPAL,
+			// "cn=administrateur,cn=users,dc=societe,dc=fr");
 			ldapEnv.put(Context.SECURITY_PRINCIPAL, "cn=read-only-admin,dc=example,dc=com");
 			ldapEnv.put(Context.SECURITY_CREDENTIALS, "password");
 			// ldapEnv.put(Context.SECURITY_PROTOCOL, "ssl");
@@ -67,7 +70,7 @@ public class LDAPConnection {
 				System.out.println("-----------------------------------------");
 				Attributes attrs = sr.getAttributes();
 				System.out.println(">>> Attributes ");
-				Collections.list(attrs.getAll()).forEach(System.out::println);
+				fetch(attrs);
 				System.out.println(">>>>>>");
 			}
 
@@ -77,6 +80,24 @@ public class LDAPConnection {
 			System.out.println(" Search error: " + e);
 			e.printStackTrace();
 			System.exit(-1);
+		}
+	}
+
+	private void fetch(Object obj) {
+		if (obj instanceof Attribute || obj instanceof Attributes) {
+			NamingEnumeration<?> temp = null;
+			try {
+				if (obj instanceof Attribute)
+					temp = ((Attribute) obj).getAll();
+				else if (obj instanceof Attributes)
+					temp = ((Attributes) obj).getAll();
+			} catch (NamingException e1) {
+			}
+			Collections.list(temp).forEach(e -> {
+				fetch(e);
+			});
+		} else {
+			System.out.println(obj);
 		}
 	}
 
