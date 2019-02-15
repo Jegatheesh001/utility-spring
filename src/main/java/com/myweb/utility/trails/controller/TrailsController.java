@@ -26,4 +26,10 @@ public class TrailsController {
 	public String findQueens(@PathVariable(name = "queenNo") Integer queenNo) {
 		return trailsService.logicForFindingQueens(queenNo);
 	}
+	
+	@Loggable
+	@RequestMapping(method = RequestMethod.GET, value = "/towerOfHanoi/{discs}")
+	public String towerOfHanoi(@PathVariable(name = "discs") Integer discs) {
+		return trailsService.logicForTOHMoves(discs);
+	}
 }

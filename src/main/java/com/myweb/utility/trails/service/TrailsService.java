@@ -80,5 +80,21 @@ public class TrailsService {
 			contentLog.append("|" + lineSeperator);
 		}
 	}
+	
+	public String logicForTOHMoves(Integer numberOfDiscs) {
+		StringBuilder contentLog = new StringBuilder();
+		moveDisc(numberOfDiscs, "A", "C", "B", contentLog);
+		return contentLog.toString();
+	}
+	
+	private void moveDisc(int numberOfDiscs, String from, String to, String inter, StringBuilder contentLog) {
+		if (numberOfDiscs == 1) {
+			contentLog.append("Moving Disc 1 from " + from + " to " + to + lineSeperator);
+		} else {
+			moveDisc(numberOfDiscs - 1, from, inter, to, contentLog);
+			contentLog.append("Moving Disc " + numberOfDiscs + " from " + from + " to " + to + lineSeperator);
+			moveDisc(numberOfDiscs - 1, inter, to, from, contentLog);
+		}
+	}
 
 }
