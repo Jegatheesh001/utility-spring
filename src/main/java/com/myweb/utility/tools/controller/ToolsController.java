@@ -37,4 +37,20 @@ public class ToolsController {
 	public String readSQLFromFolder() {
 		return toolsService.logicToReadSQLFromFolder("D:\\MyShareFolder\\SAP_DB");
 	}
+	
+	@Loggable
+	@RequestMapping(method = RequestMethod.GET, value = "/renameFiles")
+	public String renameFiles() {
+		String folderPath = "\\\\192.168.0.135\\Shared_D\\Divya\\Dental_KNG\\12-13_03_19\\After Modification\\Treatment\\Filling\\Lingual\\Porcelain";
+		toolsService.logicToRenameFiles(folderPath);
+		return "";
+	}
+	
+	@Loggable
+	@RequestMapping(method = RequestMethod.GET, value = "/mergeImages")
+	public String mergeImages() {
+		String folderPath = "\\\\192.168.0.135\\Shared_D\\Jegatheesh\\Tooth Image";
+		toolsService.logicToMergeImages(folderPath);
+		return "";
+	}
 }

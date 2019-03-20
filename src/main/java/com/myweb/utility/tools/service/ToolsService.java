@@ -1,8 +1,11 @@
 package com.myweb.utility.tools.service;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -13,6 +16,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -160,5 +165,97 @@ public class ToolsService {
 			}
 		}
 		return null;
+	}
+
+	public String logicToRenameFiles(String folderPath) {
+		File folder = new File(folderPath);
+		for (final File fileEntry : folder.listFiles()) {
+			if (!fileEntry.isDirectory()) {
+				System.out.println("Reading : " + fileEntry.getName());
+				String[] temp = fileEntry.getName().split("-");
+				String revised = null;
+				System.out.println("Revised : " + revised);
+				try {
+					revised = temp[0] + "-" + temp[1] + "-" + temp[2] + "-" + "P" +"-" + temp[3];
+					Files.copy(fileEntry.toPath(), new FileOutputStream(folderPath + "/o/"+revised));
+					revised = temp[0] + "-" + temp[1] + "-" + temp[2] + "-" + "C" +"-" + temp[3];
+					Files.copy(fileEntry.toPath(), new FileOutputStream(folderPath + "/o/"+revised));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return "";
+	}
+
+	public String logicToMergeImages(String folderPath) {
+		// base path of the images
+		File path = new File(folderPath);
+		String extension = ".png";
+		long err = 0;
+		long success = 0;
+		for (final File fileEntry : path.listFiles()) {
+			if (!fileEntry.isDirectory()) {
+				String fileName = fileEntry.getName().split("\\.")[0];
+				String[] tempArr = fileName.split("-");
+				String tooth = tempArr[tempArr.length-1];
+				boolean isNumber = false;
+				try { Integer.parseInt(tooth); isNumber = true; } catch(Exception e) {}
+				if (isFolderExists(path.getAbsolutePath() + "/output/" + tooth)) {
+					if(isNumber) {
+						mergeImage(path.getAbsolutePath() + "/base/to-" + tooth + extension, fileEntry.getAbsolutePath(),
+								path.getAbsolutePath() + "/output/" + tooth + "/" + fileEntry.getName());
+					}
+					success++;
+					String msg = success + ": " + tooth + " -> " + fileEntry.getName() + " || " + "base/to-" + tooth + extension
+							+ " || " + "output/" + tooth + "/" + fileEntry.getName();
+					if(isNumber)
+						System.out.println(msg);
+					else
+						System.err.println("NAN:: " + msg);
+				} else {
+					System.err.println(tooth + " -> " + fileEntry.getName());
+					err++;
+				}
+			}
+			// mergeImage(path.getAbsolutePath() + "/" + "image.png", path.getAbsolutePath() + "/" + "overlay.png",
+				//overlayFile.getParentFile().getAbsolutePath() + "/" + overlayFile.getName().split("\\.")[0] + "_merged"+extension);
+		}
+		System.out.println("Success: " + success + " || Errors: " + err);
+		return "";
+	}
+
+	private boolean mergeImage(String baseImagePath, String overlayPath, String outputFilePath) {
+		BufferedImage image = null, overlay = null;
+		try {
+			// load source images
+			image = ImageIO.read(new File(baseImagePath));
+			overlay = ImageIO.read(new File(overlayPath));
+
+			// create the new image, canvas size is the max. of both image sizes
+			int w = Math.max(image.getWidth(), overlay.getWidth());
+			int h = Math.max(image.getHeight(), overlay.getHeight());
+			BufferedImage combined = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+
+			// paint both images, preserving the alpha channels
+			Graphics g = combined.getGraphics();
+			g.drawImage(image, 0, 0, null);
+			g.drawImage(overlay, 0, 0, null);
+
+			// Save as new image
+			ImageIO.write(combined, "PNG", new File(outputFilePath));
+			image.flush(); overlay.flush(); combined.flush();
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	private boolean isFolderExists(String folderPath) {
+		File folder = new File(folderPath);
+		if(!folder.exists())
+			folder.mkdirs();
+		return folder.exists();
 	}
 }
