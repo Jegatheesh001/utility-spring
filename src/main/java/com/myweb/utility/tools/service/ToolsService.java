@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 
@@ -91,8 +92,10 @@ public class ToolsService {
 	public String logicToReadSQLFromFolder(String folderPath) {
 		linesWrited = 0;
 		File folder = new File(folderPath);
+		List<String> files = new ArrayList<>();
 		for (final File fileEntry : folder.listFiles()) {
 			if (!fileEntry.isDirectory()) {
+				files.add(fileEntry.getName());
 				System.out.println("Reading : " + fileEntry.getName());
 				try {
 					readContentFromFile(folderPath, fileEntry.getName(), "sql");
@@ -100,6 +103,12 @@ public class ToolsService {
 					e.printStackTrace();
 				}
 			}
+		}
+		if (files.size() > 0) {
+			List<String> temp = files.stream().map(e -> {
+				return "truncate " + e.split("\\.")[0] + ";"; 
+			}).collect(Collectors.toList());
+			writeToFile(temp, folderPath, "sql", "TruncateQuery");
 		}
 		System.out.println("Total Records : " + linesWrited);
 		return null;
