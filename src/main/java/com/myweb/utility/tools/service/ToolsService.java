@@ -1,5 +1,9 @@
 package com.myweb.utility.tools.service;
 
+import static java.util.stream.Collectors.toMap;
+import static java.util.Map.Entry.comparingByValue;
+import static java.util.Map.Entry.comparingByKey;
+
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
@@ -14,9 +18,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.imageio.ImageIO;
 
@@ -266,5 +274,62 @@ public class ToolsService {
 		if(!folder.exists())
 			folder.mkdirs();
 		return folder.exists();
+	}
+
+	public String logicToFindDuplicatedFilesInFolder(String folderPath) {
+		Map<String, Long> fileCount = new LinkedHashMap<>();
+		StringBuilder logBuilder = new StringBuilder();
+		boolean log = true;
+		log(log, "==== Printing Folder Structure ====", logBuilder);
+		loopFolder(folderPath, 1, fileCount, log, logBuilder);
+		// Sorting by value
+		Map<String, Long> sorted = fileCount.entrySet().stream().sorted(comparingByKey())
+				.sorted(Collections.reverseOrder(comparingByValue()))
+				.collect(toMap(e -> e.getKey(), e -> e.getValue(), (e1, e2) -> e2, LinkedHashMap::new));
+		// Looping Hash map
+		log(log, "==== Printing Count ====", logBuilder);
+		sorted.forEach((key, value) -> {
+			log(log, key + " -> " + value, logBuilder);
+		});
+		return logBuilder.toString();
+	}
+	
+	private String loopFolder(String folderPath, int folderLevel, Map<String, Long> fileCount, boolean log, StringBuilder logBuilder) {
+		File folder = new File(folderPath);
+		File[] folderFiles = folder.listFiles();
+		
+		String folderTitle = "==" + folder.getName() + " [" +  folderFiles.length + "]";
+		if (folderLevel > 1) {
+			Closure logg = new Closure("");
+			IntStream.range(0, folderLevel - 1).forEach(i -> logg.append(" |"));
+			logg.append(folderTitle);
+			log(log, logg.getValue(), logBuilder);
+		} else {
+			log(log, folderTitle, logBuilder);
+		}
+		for (final File fileEntry : folderFiles) {
+			String fileName = fileEntry.getName();
+			if(fileEntry.isDirectory()) {
+				loopFolder(fileEntry.getAbsolutePath(), folderLevel + 1, fileCount, log, logBuilder);
+			} else {
+				Closure logg = new Closure("");
+				IntStream.range(0, folderLevel).forEach(i -> logg.append(" |"));
+				logg.append("--" + fileName);
+				log(log, logg.getValue(), logBuilder);
+				Long count = fileCount.get(fileName);
+				if(count == null) {
+					count = 0l;
+				}
+				fileCount.put(fileName, ++count);
+			}
+		}
+		return "";
+	}
+	
+	private void log(boolean log, String logContent, StringBuilder logBuilder) {
+		if(log) {
+			logBuilder.append(logContent + lineSeperator);
+		}
+		System.out.println(logContent);
 	}
 }

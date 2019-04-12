@@ -53,4 +53,11 @@ public class ToolsController {
 		toolsService.logicToMergeImages(folderPath);
 		return "";
 	}
+	
+	@Loggable
+	@RequestMapping(method = RequestMethod.GET, value = "/findDuplicatedFiles")
+	public String findDuplicatedFilesInFolder() {
+		String folderPath = "I:\\Movies";
+		return toolsService.logicToFindDuplicatedFilesInFolder(folderPath);
+	}
 }
