@@ -32,7 +32,7 @@ public class RepoService {
 
 		// url = "https://localhost/svn/medasrepository/";
 		// password = "pass";
-		url = "https://192.168.0.100/svn/MEDAS-HIS/";
+		url = "https://dc.medas.local/svn/medas-hims/";
 		password = "jegatheesh123";
 
 		SVNRepository repository = null;
@@ -88,7 +88,7 @@ public class RepoService {
 				}
 			}
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 		return contentLog.toString();
 	}
