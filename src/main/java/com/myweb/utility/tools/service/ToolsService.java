@@ -114,7 +114,7 @@ public class ToolsService {
 		}
 		if (files.size() > 0) {
 			List<String> temp = files.stream().map(e -> {
-				return "truncate " + e.split("\\.")[0] + ";"; 
+				return "truncate table " + e.split("\\.")[0] + ";"; 
 			}).collect(Collectors.toList());
 			writeToFile(temp, folderPath, "sql", "TruncateQuery");
 		}
