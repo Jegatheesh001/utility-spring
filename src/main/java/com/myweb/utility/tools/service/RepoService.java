@@ -72,6 +72,8 @@ public class RepoService {
 				log(true, "log message: " + logEntry.getMessage(), contentLog);
 
 				if (logEntry.getChangedPaths().size() > 0) {
+					String path = ((SVNLogEntryPath) logEntry.getChangedPaths().values().toArray()[0]).getPath();
+					log(true, "branch: " + path.split("/")[2], contentLog);
 					log(true, "", contentLog);
 					log(true, "changed paths " + "(" + logEntry.getChangedPaths().size() + ") :", contentLog);
 					Set<SVNLogEntryPath> changedPathsSet = logEntry.getChangedPaths().keySet();
