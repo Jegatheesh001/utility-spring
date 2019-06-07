@@ -327,5 +327,29 @@ public class ToolsService {
 		}
 		return "";
 	}
+
+	public String logicToFindDuplicateFilesFromAnotherFolder(String folder, String folderToCheck) {
+		// Fetching already uploaded files
+		File folderToCheckPath = new File(folderToCheck);
+		List<String> files = new ArrayList<>();
+		for (final File fileEntry : folderToCheckPath.listFiles()) {
+			String fileName = fileEntry.getName();
+			files.add(fileName);
+		}
+		// base path of the images
+		long duplicates = 0;
+		File folderPath = new File(folder);
+		StringBuilder logBuilder = new StringBuilder();
+		for (final File fileEntry : folderPath.listFiles()) {
+			String fileName = fileEntry.getName();
+			if(files.contains(fileName)) {
+				duplicates++;
+				log(true, fileName, logBuilder);
+				fileEntry.delete();
+			}
+		}
+		log(true, "Total: " + duplicates, logBuilder);
+		return logBuilder.toString();
+	}
 	
 }

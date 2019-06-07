@@ -60,4 +60,12 @@ public class ToolsController {
 		String folderPath = "I:\\Movies";
 		return toolsService.logicToFindDuplicatedFilesInFolder(folderPath);
 	}
+	
+	@Loggable
+	@RequestMapping(method = RequestMethod.GET, value = "/findDuplicatesForUpload")
+	public String duplicateCheckToUploadFromOneDrive() {
+		String folder = "C:\\Users\\ACER\\Downloads\\OneDrive Photos\\ToUpload";
+		String folderToCheck = "C:\\Users\\ACER\\Downloads\\OneDrive Photos\\Uploaded";
+		return toolsService.logicToFindDuplicateFilesFromAnotherFolder(folder, folderToCheck);
+	}
 }
