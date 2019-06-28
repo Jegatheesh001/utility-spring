@@ -68,4 +68,12 @@ public class ToolsController {
 		String folderToCheck = "C:\\Users\\ACER\\Downloads\\OneDrive Photos\\Uploaded";
 		return toolsService.logicToFindDuplicateFilesFromAnotherFolder(folder, folderToCheck);
 	}
+	
+	@Loggable
+	@RequestMapping(method = RequestMethod.GET, value = "/readSubtitles")
+	public String readSubtitles() {
+		String filePath = "I:\\Movies\\English\\Shazam (2019) [BluRay] [720p] [YTS.LT]\\Shazam!.2019.720p.BluRay.x264-[YTS.LT].srt";
+		String fromTime = null;
+		return toolsService.logicToReadSubtitles(filePath, 2l, 400l, fromTime);
+	}
 }

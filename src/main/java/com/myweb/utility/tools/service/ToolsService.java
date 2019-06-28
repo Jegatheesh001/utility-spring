@@ -19,6 +19,11 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -69,8 +74,6 @@ public class ToolsService {
 			Sheet sheet = null;
 			Row row = null;
 			Cell contentCell = null;
-			String tableName = null;
-			String[] tableColumns = null;
 			String contentStr = null;
 			for (int sheetNo = 0; sheetNo < workbook.getNumberOfSheets(); sheetNo++) {
 				sheet = workbook.getSheetAt(sheetNo);
@@ -350,6 +353,51 @@ public class ToolsService {
 		}
 		log(true, "Total: " + duplicates, logBuilder);
 		return logBuilder.toString();
+	}
+
+	/**
+	 * @param filePath
+	 * @param seconds
+	 * @param milli
+	 * @param from
+	 * @created 2019-06-28
+	 */
+	public String logicToReadSubtitles(String filePath, Long seconds, Long milli, String from) {
+		Path path = FileSystems.getDefault().getPath(filePath);
+		List<String> lines = new ArrayList<>();
+		try {
+			DateTimeFormatter f1 = DateTimeFormatter.ofPattern("HH:mm:ss,SSS");
+			Files.lines(path, StandardCharsets.UTF_8).map(line -> {
+				LocalTime fromTime = null;
+				LocalTime startTime = null;
+				LocalTime endTime = null;
+				if (from != null) {
+					fromTime = LocalTime.parse(from, f1);
+				}
+				if (line.contains("-->")) {
+					String[] arr = line.split("-->");
+					startTime = LocalTime.parse(arr[0].trim(), f1);
+					if (fromTime == null || startTime.isAfter(fromTime)) {
+						startTime = startTime.plus(seconds, ChronoUnit.SECONDS);
+						startTime = startTime.plus(milli, ChronoUnit.MILLIS);
+						endTime = LocalTime.parse(arr[1].trim(), f1);
+						endTime = endTime.plus(seconds, ChronoUnit.SECONDS);
+						endTime = endTime.plus(milli, ChronoUnit.MILLIS);
+						return startTime.format(f1) + " --> " + endTime.format(f1);
+					} else {
+						return line;
+					}
+				} else {
+					return line;
+				}
+			}).forEach(line -> {
+				lines.add(line);
+			});
+			writeToFile(lines, path.getParent().toFile().getAbsolutePath(), "srt", path.toFile().getName());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 }
