@@ -15,13 +15,10 @@ public class BubbleSort implements Sort {
 	}
 
 	private Integer[] normalSort(Integer[] arr) {
-		int temp = 0;
 		for (int i = 0; i < arr.length; i++) {
 			for (int j = i + 1; j < arr.length; j++) {
 				if (arr[j] < arr[i]) {
-					temp = arr[j];
-					arr[j] = arr[i];
-					arr[i] = temp;
+					swap(arr, i, j);
 				}
 			}
 		}
@@ -29,15 +26,12 @@ public class BubbleSort implements Sort {
 	}
 	
 	private Integer[] bestSort(Integer[] arr) {
-		int i, temp = 0;
 		boolean swapped = false;
-		for (i = 0; i < arr.length; i++) {
+		for (int i = 0; i < arr.length; i++) {
 			swapped = false;
 			for (int j = 0; j < arr.length - (i + 1); j++) {
 				if (arr[j] > arr[j + 1]) {
-					temp = arr[j + 1];
-					arr[j + 1] = arr[j];
-					arr[j] = temp;
+					swap(arr, j, j + 1);
 					swapped = true;
 				}
 			}
@@ -50,15 +44,12 @@ public class BubbleSort implements Sort {
 	}
 	
 	private Integer[] anotherImpl(Integer[] arr) {
-		int temp = 0;
 		boolean swapped = true;
 		while (swapped) {
 			swapped = false;
 			for (int j = 0; j < arr.length - 1; j++) {
 				if (arr[j] > arr[j + 1]) {
-					temp = arr[j + 1];
-					arr[j + 1] = arr[j];
-					arr[j] = temp;
+					swap(arr, j, j + 1);
 					swapped = true;
 				}
 			}

@@ -5,7 +5,7 @@ package com.myweb.utility.test.sorting;
  *         <b>Created</b> On Jul 26, 2019
  *
  */
-public interface Sort {
+public interface Sort extends Swap {
 
 	public Integer[] sort(Integer[] arr);
 
