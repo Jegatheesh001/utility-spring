@@ -1,17 +1,27 @@
 package com.myweb.utility.test;
 
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+
 /**
  * @author Jegatheesh <br>
  *         <b>Created</b> On Aug 06, 2019
  *
  */
 public class MaxPossibleOne {
+	
 	public static void main(String[] args) {
-		findPossibleOnes(4, new int[] { 0, 1, 0, 0 });
-		findPossibleOnes(5, new int[] { 1, 0, 1, 1, 1 });
-		findPossibleOnes(3, new int[] { 1, 1, 1 });
-		findPossibleOnes(8, new int[] { 0, 0, 1, 1, 1, 0, 1, 0 });
-		findPossibleOnes(8, new int[] { 0, 0, 1, 1, 1, 0, 1, 1 });
+		new MaxPossibleOne().runTestCases();
+	}
+	
+	@Test
+	public void runTestCases() {
+		assertEquals(findPossibleOnes(4, new int[] { 0, 1, 0, 0 }), 3);
+		assertEquals(findPossibleOnes(5, new int[] { 1, 0, 1, 1, 1 }), 5);
+		assertEquals(findPossibleOnes(3, new int[] { 1, 1, 1 }), 3);
+		assertEquals(findPossibleOnes(8, new int[] { 0, 0, 1, 1, 1, 0, 1, 0 }), 5);
+		assertEquals(findPossibleOnes(8, new int[] { 0, 0, 1, 1, 1, 0, 1, 1 }), 6);
 	}
 
 	public static int findPossibleOnes(int size, int[] arr) {
