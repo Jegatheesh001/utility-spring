@@ -1,4 +1,4 @@
-package com.myweb.utility.test;
+package com.myweb.utility.test.problems;
 
 import static org.junit.Assert.assertEquals;
 
