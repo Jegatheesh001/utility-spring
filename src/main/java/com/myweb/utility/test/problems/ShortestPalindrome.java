@@ -1,5 +1,12 @@
 package com.myweb.utility.test.problems;
 
+/**
+ * shortest Palindrome while adding values in front
+ * 
+ * @author Jegatheesh <br>
+ *         Created on <b>15-Aug-2019</b>
+ *
+ */
 public class ShortestPalindrome {
 	public String shortestPalindrome(String s) {
 		if (isPalindrome(s)) {
