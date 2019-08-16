@@ -3,8 +3,7 @@ package com.myweb.utility.test.problems;
 /**
  * Add2ListNode
  * 
- * @link https://leetcode.com/problems/add-two-numbers/submissions/
- * 
+ * @link {@link https://leetcode.com/problems/add-two-numbers/}
  * @author Jegatheesh <br>
  *         Created on <b>16-Aug-2019</b>
  *
@@ -53,7 +52,7 @@ public class Add2ListNode {
 			}
 			prev.val = carry % 10;
 			carry = carry / 10;
-			System.out.println(" Out: " + prev.val);
+			// System.out.println(" Out: " + prev.val);
 			if (p1 != null || p2 != null || carry > 0) {
 				prev.next = new ListNode(0);
 				prev = prev.next;
@@ -88,7 +87,7 @@ public class Add2ListNode {
 			}
 			carry = tot / 10;
 			prev.val = tot % 10;
-			System.out.println(" Out: " + prev.val);
+			// System.out.println(" Out: " + prev.val);
 			if (p1 != null || p2 != null || carry > 0) {
 				prev.next = new ListNode(0);
 				prev = prev.next;
