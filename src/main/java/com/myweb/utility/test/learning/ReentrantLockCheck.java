@@ -50,7 +50,7 @@ public class ReentrantLockCheck {
 	
 	public void acquireCondition() throws InterruptedException {
 		// Using condition we can check for particular condition to satisfy
-		// Please check Producer consumer example
+		// Please check BlockingQueue Implementation
 		lock.lock();
 		Condition newCondition = lock.newCondition();
 		newCondition.await();
