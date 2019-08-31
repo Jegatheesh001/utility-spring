@@ -3,7 +3,7 @@ package com.myweb.utility.test.learning;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Concurrency variable issue check
+ * Concurrency variable issue check with ThreadLocal
  * 
  * @author Jegatheesh <br>
  *         Created on <b>24-Aug-2019</b>
