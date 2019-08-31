@@ -5,6 +5,14 @@ import java.util.Queue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * BlockingQueue Implementation
+ * 
+ * @author Jegatheesh <br>
+           Created on <b>31-Aug-2019</b>
+ *
+ * @param <T>
+ */
 public class BlockingQueue<T> {
 
 	private Queue<T> queue = null;
@@ -29,6 +37,7 @@ public class BlockingQueue<T> {
 				notFull.await();
 			}
 			queue.add(message);
+			// Notifying threads which is awaiting notEmpty condition
 			notEmpty.signalAll();
 		} finally {
 			lock.unlock();
@@ -42,6 +51,7 @@ public class BlockingQueue<T> {
 				notEmpty.await();
 			}
 			T item = queue.remove();
+			// Notifying threads which is awaiting notFull condition
 			notFull.signalAll();
 			return item;
 		} finally {
