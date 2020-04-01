@@ -111,10 +111,9 @@ public class ToolsService {
 		List<String> files = new ArrayList<>();
 		for (final File fileEntry : folder.listFiles()) {
 			if (!fileEntry.isDirectory()) {
-				files.add(fileEntry.getName());
 				System.out.println("Reading : " + fileEntry.getName());
 				try {
-					readContentFromFile(folderPath, fileEntry.getName(), "sql");
+					readContentFromFile(folderPath, fileEntry.getName(), "sql", files);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -130,7 +129,7 @@ public class ToolsService {
 		return null;
 	}
 
-	public String readContentFromFile(String folderPath, String fileName, String extension) throws IOException {
+	public String readContentFromFile(String folderPath, String fileName, String extension, List<String> files) throws IOException {
 		if (fileName.endsWith("." + extension)) {
 			Path path = FileSystems.getDefault().getPath(folderPath, fileName);
 			List<String> lines = new ArrayList<>();
@@ -138,6 +137,11 @@ public class ToolsService {
 				lines.add(line);
 			});
 			fileFiter(lines, folderPath, extension, true);
+			// If tables are not empty
+			if (lines.size() > 0) {
+				if (!(lines.size() == 1 && cleanTextContent(lines.get(0)).trim().length() == 0))
+					files.add(fileName);
+			}
 			System.out.println("Records : " + lines.size());
 		}
 		return null;
@@ -182,7 +186,10 @@ public class ToolsService {
 		if (lines.size() > 0) {
 			try (BufferedWriter bw = new BufferedWriter(new FileWriter(folderPath + "/op/" + fileName + "." + extension, true))) {
 				for (String line : lines) {
-					bw.write(cleanTextContent(line));
+					// checking unwanted character endings in file
+					String cleanLine = cleanTextContent(line);
+					cleanLine = cleanLine.trim().length() == 0 ? "" : line;
+					bw.write(cleanLine);
 					bw.newLine();
 				}
 			} catch (IOException e) {
