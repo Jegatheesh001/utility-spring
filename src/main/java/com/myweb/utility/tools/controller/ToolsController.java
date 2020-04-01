@@ -1,6 +1,7 @@
 package com.myweb.utility.tools.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -75,5 +76,11 @@ public class ToolsController {
 		String filePath = "I:\\Movies\\English\\Shazam (2019) [BluRay] [720p] [YTS.LT]\\Shazam!.2019.720p.BluRay.x264-[YTS.LT].srt";
 		String fromTime = null;
 		return toolsService.logicToReadSubtitles(filePath, 2l, 400l, fromTime);
+	}
+	
+	@Loggable
+	@GetMapping("/createEntityFromTable")
+	public void createEntityFromTable() {
+		toolsService.createEntityFromTable();
 	}
 }
