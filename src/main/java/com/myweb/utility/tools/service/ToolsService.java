@@ -411,217 +411,31 @@ public class ToolsService {
 	}
 
 	public void createEntityFromTable() {
-		String table = "`consult_id` int(11) NOT NULL AUTO_INCREMENT,\r\n" + 
-				"  `encounter_id` int(10) unsigned DEFAULT NULL,\r\n" + 
-				"  `consult_date` date NOT NULL,\r\n" + 
-				"  `ip_id` int(10) unsigned DEFAULT NULL,\r\n" + 
+		String table = "`id` int(10) unsigned NOT NULL AUTO_INCREMENT,\r\n" + 
+				"  `invoice_date` date NOT NULL,\r\n" + 
+				"  `advance_adjusted` decimal(10,3) DEFAULT '0.000',\r\n" + 
+				"  `patient_due` decimal(12,3) DEFAULT NULL,\r\n" + 
+				"  `doctors_name` varchar(145) DEFAULT NULL,\r\n" + 
 				"  `doctors_id` int(11) NOT NULL DEFAULT '0',\r\n" + 
-				"  `consult_fee` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `op_number` varchar(25) DEFAULT NULL,\r\n" + 
-				"  `department_id` int(11) NOT NULL DEFAULT '0',\r\n" + 
-				"  `insurar_status` char(3) CHARACTER SET latin1 DEFAULT NULL,\r\n" + 
-				"  `insurar_id` int(11) DEFAULT NULL,\r\n" + 
-				"  `card_no` varchar(51) DEFAULT NULL,\r\n" + 
-				"  `deductible` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `lab_status` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `closed_status` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `fee_app` varchar(15) DEFAULT NULL,\r\n" + 
-				"  `edit_status` varchar(1) NOT NULL DEFAULT 'Y',\r\n" + 
-				"  `invoice_status` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `direct_lab` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `refer_status` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `clinic_id` int(10) unsigned DEFAULT NULL,\r\n" + 
-				"  `rdoctor_id` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `copay_amt` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `copay_percent` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `insurar_sub` smallint(5) unsigned DEFAULT NULL,\r\n" + 
-				"  `icard_expiry` date DEFAULT NULL,\r\n" + 
-				"  `network_type` varchar(105) DEFAULT NULL,\r\n" + 
-				"  `bill_status` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `previous_due` decimal(10,3) DEFAULT '0.000',\r\n" + 
-				"  `balance_due` decimal(10,3) DEFAULT '0.000',\r\n" + 
-				"  `discount` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `bill_submit` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `entered_date` datetime DEFAULT NULL,\r\n" + 
-				"  `patient_age` int(10) unsigned DEFAULT NULL,\r\n" + 
-				"  `corp_disc` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `patient_agemonth` int(10) unsigned DEFAULT NULL,\r\n" + 
-				"  `deductable_type` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `deductable_amt` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `patient_ageweek` int(10) unsigned DEFAULT NULL,\r\n" + 
-				"  `sl_certificate` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `sickleave_amt` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `invoice_no` varchar(20) CHARACTER SET latin1 DEFAULT NULL,\r\n" + 
-				"  `barcode_no` bigint(20) unsigned DEFAULT NULL,\r\n" + 
-				"  `file_no` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `billed_to` varchar(1) NOT NULL DEFAULT 'P',\r\n" + 
-				"  `patient_name` varchar(145) DEFAULT NULL,\r\n" + 
-				"  `rej_amt` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `lab_slno` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `enteredby` int(11) DEFAULT NULL,\r\n" + 
-				"  `insurar_deduct` varchar(1) DEFAULT 'A',\r\n" + 
-				"  `gross_amt` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `gross_amt_curr` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `co_gross` varchar(1) DEFAULT 'N',\r\n" + 
-				"  `copay_percenttrt` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `visit_status` varchar(2) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `cert_no` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `dependent_no` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `doctor_view` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `deductible1` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `corp_disc1` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `copay_amt1` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `consult_fee1` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `fee_app1` varchar(15) DEFAULT NULL,\r\n" + 
-				"  `employer` varchar(145) DEFAULT NULL,\r\n" + 
-				"  `leave_days` varchar(405) DEFAULT NULL,\r\n" + 
-				"  `appoint_id` int(10) unsigned DEFAULT NULL,\r\n" + 
-				"  `valid_upto` date DEFAULT NULL,\r\n" + 
-				"  `refer_diag` varchar(405) DEFAULT NULL,\r\n" + 
-				"  `file_status` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `bill_no` varchar(20) DEFAULT NULL,\r\n" + 
-				"  `start_time` datetime DEFAULT NULL,\r\n" + 
-				"  `end_time` datetime DEFAULT NULL,\r\n" + 
-				"  `for_alllab` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `deductible_lab` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `min_value` varchar(15) DEFAULT NULL,\r\n" + 
-				"  `max_value` varchar(15) DEFAULT NULL,\r\n" + 
-				"  `copay_consult` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `office_id` int(11) NOT NULL DEFAULT '0',\r\n" + 
-				"  `deductible_rad` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `for_allrad` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `copay_medicine` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `copay_percentrad` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `pat_type` varchar(15) DEFAULT NULL,\r\n" + 
-				"  `rej_reason` text,\r\n" + 
-				"  `correction_type` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `corr_comment` varchar(405) DEFAULT NULL,\r\n" + 
-				"  `appr_no` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `approved_date` datetime DEFAULT NULL,\r\n" + 
-				"  `resub_status` char(1) DEFAULT 'N',\r\n" + 
-				"  `write_off` char(1) DEFAULT 'N',\r\n" + 
-				"  `writeoff_amt` decimal(10,3) NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `renet_claim1` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `reresub_status` char(1) DEFAULT 'N',\r\n" + 
-				"  `rerej_amt1` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `renet_claim2` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `rerej_reason1` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `writeoff_date` date DEFAULT NULL,\r\n" + 
-				"  `referby_id` int(10) unsigned DEFAULT NULL,\r\n" + 
-				"  `referby_name` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `referto_id` int(10) unsigned DEFAULT NULL,\r\n" + 
-				"  `referto_name` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `extra_card_no` varchar(50) DEFAULT NULL,\r\n" + 
-				"  `daman_status` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `rerej_reason` varchar(405) DEFAULT NULL,\r\n" + 
-				"  `renet_claim` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `package_status` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `acc_code` varchar(15) DEFAULT NULL,\r\n" + 
-				"  `child_id` int(10) unsigned DEFAULT NULL,\r\n" + 
-				"  `refer_consult` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `icard_effective` date DEFAULT NULL,\r\n" + 
-				"  `employee_id` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `rerej_amt` decimal(10,3) unsigned NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `close_status` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `copay_percentdental` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `deductible_trt` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `deductible_dental` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `deductible_medicine` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `lab_min` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `lab_max` varchar(15) DEFAULT NULL,\r\n" + 
-				"  `rad_min` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `rad_max` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `trt_max` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `trt_min` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `dental_min` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `dental_max` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `medicine_min` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `medicine_max` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `for_alltrt` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `for_alldental` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `for_allmedicine` varchar(5) DEFAULT NULL,\r\n" + 
-				"  `invoice_max_deduct` varchar(10) DEFAULT NULL,\r\n" + 
-				"  `invoice_max_liability` varchar(10) DEFAULT NULL,\r\n" + 
-				"  `visit_doctor` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `visit_dept` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `nurse_view` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `nurse_start_time` datetime DEFAULT NULL,\r\n" + 
-				"  `visit_id` int(10) unsigned DEFAULT NULL,\r\n" + 
-				"  `nurse_end_time` datetime DEFAULT NULL,\r\n" + 
-				"  `visit_type` varchar(5) NOT NULL DEFAULT 'N' COMMENT 'visit_type can be N or F for New & Followup',\r\n" + 
-				"  `encounter_type` varchar(10) DEFAULT NULL,\r\n" + 
-				"  `balance_due_head` varchar(10) DEFAULT NULL,\r\n" + 
+				"  `invoice_no` varchar(25) DEFAULT NULL,\r\n" + 
+				"  `sponsor_liability` varchar(10) DEFAULT NULL,\r\n" + 
+				"  `sponsor_id` varchar(10) DEFAULT NULL,\r\n" + 
 				"  `discount_head` varchar(10) DEFAULT NULL,\r\n" + 
-				"  `copay_sponsor` varchar(10) DEFAULT NULL,\r\n" + 
-				"  `copay_sponsor_perc` varchar(10) DEFAULT NULL,\r\n" + 
-				"  `sponsor_app` varchar(10) DEFAULT NULL,\r\n" + 
-				"  `ipFlag` varchar(1) NOT NULL DEFAULT 'O',\r\n" + 
-				"  `admit_date` datetime DEFAULT NULL,\r\n" + 
-				"  `registration_id` int(10) unsigned DEFAULT NULL,\r\n" + 
-				"  `admited_doctor` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `sponsor_deduct_status` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `price_change1` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `price_change2` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `post_writeoff` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `designation` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `verified_date` date DEFAULT NULL,\r\n" + 
-				"  `verified_by` int(10) unsigned DEFAULT NULL,\r\n" + 
-				"  `price_change3` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `disc_deduct` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `assess_done` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `vitals_done` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `hopi_done` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `diagnosis_done` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `medicine_prescribed` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `treat_prescribed` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `treat_done` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `history_done` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `invest_prescribed` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `request_mode` varchar(15) DEFAULT NULL,\r\n" + 
-				"  `policy_number` varchar(25) DEFAULT NULL,\r\n" + 
-				"  `preapp_limit` varchar(12) DEFAULT NULL,\r\n" + 
-				"  `networkoffice_id` int(10) unsigned DEFAULT NULL,\r\n" + 
-				"  `refered_consult_id` int(11) DEFAULT '0',\r\n" + 
-				"  `patientName_ar` varchar(60) DEFAULT NULL,\r\n" + 
-				"  `referal_notes` text,\r\n" + 
-				"  `admitted_doctor` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `queue_id` varchar(200) DEFAULT NULL,\r\n" + 
-				"  `copay_patient` varchar(15) DEFAULT NULL,\r\n" + 
-				"  `reopen_status` varchar(1) DEFAULT 'N',\r\n" + 
-				"  `online_status` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `oasis_visitId` int(10) unsigned DEFAULT NULL,\r\n" + 
-				"  `location` varchar(450) DEFAULT NULL,\r\n" + 
-				"  `request_status` varchar(1) DEFAULT 'N',\r\n" + 
-				"  `ip_number` varchar(10) DEFAULT NULL,\r\n" + 
-				"  `category_id` varchar(10) DEFAULT NULL,\r\n" + 
-				"  `deductible_ip` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `copay_ip` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `ip_min` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `ip_max` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `for_allip` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `claim_no` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `receipt_status` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `sms_language` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `patient_agedays` int(10) unsigned DEFAULT NULL,\r\n" + 
-				"  `approval_status` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `copay_maternity` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `maternity_min` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `maternity_max` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `copay_optical` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `optical_min` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `optical_max` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `copay_diagnostic` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `diagnostic_min` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `diagnostic_max` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `request_no` int(10) unsigned DEFAULT NULL,\r\n" + 
-				"  `confidential` varchar(1) DEFAULT 'N',\r\n" + 
-				"  `claim_edit_status` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `refer_consult_status` varchar(1) DEFAULT 'N',\r\n" + 
-				"  `client_portal` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `clinic_lab_ack` varchar(1) NOT NULL DEFAULT 'Y',\r\n" + 
-				"  `surgery_status` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `dept_confidential` varchar(1) NOT NULL DEFAULT 'N',\r\n" + 
-				"  `discount_remarks` longtext,";
+				"  `office_id` int(11) NOT NULL DEFAULT '0',\r\n" + 
+				"  `invoice_type` char(10) DEFAULT NULL,\r\n" + 
+				"  `insurar_id` int(11) DEFAULT NULL,\r\n" + 
+				"  `file_no` varchar(25) DEFAULT NULL,\r\n" + 
+				"  `visit_id` int(11) NOT NULL DEFAULT '0',\r\n" + 
+				"  `invoice_net` decimal(12,3) NOT NULL DEFAULT '0.000',\r\n" + 
+				"  `vat_amount` decimal(12,3) NOT NULL DEFAULT '0.000',\r\n" + 
+				"  `invoice_gross` decimal(12,3) NOT NULL DEFAULT '0.000',\r\n" + 
+				"  `process_status` int(5) DEFAULT '0',\r\n" + 
+				"  `visit_date` date NOT NULL,\r\n" + 
+				"  `patient_name` varchar(150) DEFAULT NULL,\r\n" + 
+				"  `sponsor_name` varchar(45) DEFAULT NULL,\r\n" + 
+				"  `insurar_status` varchar(10) DEFAULT NULL,\r\n" + 
+				"  `department_name` varchar(45) DEFAULT NULL,\r\n" + 
+				"  `department_id` int(10) DEFAULT '0',";
 		String[] columns = table.split("\r\n");
 		log.info("Total Columns: {}", columns.length);
 		for (String column : columns) {
@@ -632,21 +446,44 @@ public class ToolsService {
 				name = name.substring(1, name.length() - 1);
 			}
 			String type = contents[1].trim().toLowerCase();
-			String className = null;
-			if (type.contains("varchar") || type.contains("longtext") || type.contains("char") || type.contains("text")) {
-				className = "String";
-			} else if(type.contains("date")) {
-				className = "Date";
-			} else if(type.contains("int")) {
-				className = "Integer";
-			} else if(type.contains("decimal")) {
-				className = "Double";
-			}
+			String className = getClassName(type);
 			PrintStream stream = className != null ? System.out : System.err;
 			stream.println("@Column(name = \"" + name + "\")");
 			name = name.toLowerCase();
-			stream.println("private " + className + " " + name + ";");
+			stream.println("private " + className + " " + camelCase(name) + ";");
 		}
+	}
+
+	private String getClassName(String type) {
+		String className = null;
+		if (type.contains("varchar") || type.contains("longtext") || type.contains("char") || type.contains("text")) {
+			className = "String";
+		} else if(type.contains("date")) {
+			className = "Date";
+		} else if(type.contains("int")) {
+			className = "Integer";
+		} else if(type.contains("decimal")) {
+			className = "Double";
+		}
+		return className;
+	}
+	
+	public String camelCase(String name) {
+	    StringBuilder sb = new StringBuilder();
+	    boolean capitalizeNext = false;
+	    for (char c : name.toCharArray()) {
+	        if (c == '_') {
+	            capitalizeNext = true;
+	        } else {
+	            if (capitalizeNext) {
+	                sb.append(Character.toUpperCase(c));
+	                capitalizeNext = false;
+	            } else {
+	                sb.append(c);
+	            }
+	        }
+	    }
+	    return sb.toString();
 	}
 	
 }
