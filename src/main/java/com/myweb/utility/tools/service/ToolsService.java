@@ -410,39 +410,16 @@ public class ToolsService {
 		return null;
 	}
 
-	public void createEntityFromTable() {
-		String table = "`id` int(10) unsigned NOT NULL AUTO_INCREMENT,\r\n" + 
-				"  `invoice_date` date NOT NULL,\r\n" + 
-				"  `advance_adjusted` decimal(10,3) DEFAULT '0.000',\r\n" + 
-				"  `patient_due` decimal(12,3) DEFAULT NULL,\r\n" + 
-				"  `doctors_name` varchar(145) DEFAULT NULL,\r\n" + 
-				"  `doctors_id` int(11) NOT NULL DEFAULT '0',\r\n" + 
-				"  `invoice_no` varchar(25) DEFAULT NULL,\r\n" + 
-				"  `sponsor_liability` varchar(10) DEFAULT NULL,\r\n" + 
-				"  `sponsor_id` varchar(10) DEFAULT NULL,\r\n" + 
-				"  `discount_head` varchar(10) DEFAULT NULL,\r\n" + 
-				"  `office_id` int(11) NOT NULL DEFAULT '0',\r\n" + 
-				"  `invoice_type` char(10) DEFAULT NULL,\r\n" + 
-				"  `insurar_id` int(11) DEFAULT NULL,\r\n" + 
-				"  `file_no` varchar(25) DEFAULT NULL,\r\n" + 
-				"  `visit_id` int(11) NOT NULL DEFAULT '0',\r\n" + 
-				"  `invoice_net` decimal(12,3) NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `vat_amount` decimal(12,3) NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `invoice_gross` decimal(12,3) NOT NULL DEFAULT '0.000',\r\n" + 
-				"  `process_status` int(5) DEFAULT '0',\r\n" + 
-				"  `visit_date` date NOT NULL,\r\n" + 
-				"  `patient_name` varchar(150) DEFAULT NULL,\r\n" + 
-				"  `sponsor_name` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `insurar_status` varchar(10) DEFAULT NULL,\r\n" + 
-				"  `department_name` varchar(45) DEFAULT NULL,\r\n" + 
-				"  `department_id` int(10) DEFAULT '0',";
-		String[] columns = table.split("\r\n");
+	public void createEntityFromTable(String table) {
+		String[] columns = table.split("\n");
 		log.info("Total Columns: {}", columns.length);
 		for (String column : columns) {
 			column = column.trim();
+			if (column.length() == 0)
+				continue;
 			String[] contents = column.split(" ");
 			String name = contents[0].trim();
-			if(name.startsWith("`")) {
+			if (name.startsWith("`")) {
 				name = name.substring(1, name.length() - 1);
 			}
 			String type = contents[1].trim().toLowerCase();

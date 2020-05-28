@@ -3,6 +3,8 @@ package com.myweb.utility.tools.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -71,7 +73,7 @@ public class ToolsController {
 	}
 	
 	@Loggable
-	@RequestMapping(method = RequestMethod.GET, value = "/readSubtitles")
+	@GetMapping("/readSubtitles")
 	public String readSubtitles() {
 		String filePath = "I:\\Movies\\English\\Shazam (2019) [BluRay] [720p] [YTS.LT]\\Shazam!.2019.720p.BluRay.x264-[YTS.LT].srt";
 		String fromTime = null;
@@ -79,8 +81,8 @@ public class ToolsController {
 	}
 	
 	@Loggable
-	@GetMapping("/createEntityFromTable")
-	public void createEntityFromTable() {
-		toolsService.createEntityFromTable();
+	@PostMapping("/createEntityFromTable")
+	public void createEntityFromTable(@RequestBody String table) {
+		toolsService.createEntityFromTable(table);
 	}
 }
