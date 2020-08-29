@@ -41,7 +41,10 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.myweb.utility.trails.service.ImportDataFromExcel;
 
 /**
  * @author Jegatheesh<br>
@@ -461,6 +464,16 @@ public class ToolsService {
 	        }
 	    }
 	    return sb.toString();
+	}
+	
+	private ImportDataFromExcel excelService;
+	@Autowired
+	public void setExcelService(ImportDataFromExcel excelService) {
+		this.excelService = excelService;
+	}
+
+	public void importFromExcelToTable(String tableName, Map<String, String> requestParam) {
+		excelService.importFromExcelToTable(tableName, requestParam);
 	}
 	
 }

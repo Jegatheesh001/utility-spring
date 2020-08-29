@@ -1,5 +1,7 @@
 package com.myweb.utility.tools.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.myweb.utility.aspects.Loggable;
@@ -84,5 +87,11 @@ public class ToolsController {
 	@PostMapping("/createEntityFromTable")
 	public void createEntityFromTable(@RequestBody String table) {
 		toolsService.createEntityFromTable(table);
+	}
+	
+	@Loggable
+	@GetMapping("/importFromExcelToTable/{tableName}")
+	public void importFromExcelToTable(@PathVariable(name = "tableName") String tableName, @RequestParam Map<String, String> requestParam) {
+		toolsService.importFromExcelToTable(tableName, requestParam);
 	}
 }
