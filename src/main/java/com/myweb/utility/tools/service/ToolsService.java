@@ -15,6 +15,9 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -60,8 +63,11 @@ import com.myweb.utility.trails.service.ImportDataFromExcel;
 @Service
 public class ToolsService {
 	private static final Logger log = LoggerFactory.getLogger(ToolsService.class);
-	@Value("${api.xmlBasePath}")
+	
+	@Value("${api.path.xmlBasePath}")
 	private String xmlBasePath;
+	@Value("${api.path.tempPath}")
+	private String tempPath;
 
 	public String logicForImportDataFromExcel(String filePath) {
 		Workbook workbook = fetchExcelDocument(filePath);
@@ -486,7 +492,7 @@ public class ToolsService {
 	@Autowired
 	private ToolsDao dao;
 	public void readFromXMLForRemittance(String fileName) {
-		File inputFile = new File(xmlBasePath + fileName);
+		File inputFile = getFile(fileName);
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		try {
 			SAXParser parser = factory.newSAXParser();
@@ -497,5 +503,22 @@ public class ToolsService {
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			log.error(e.getMessage(), e);
 		}
+	}
+	
+	private File getFile(String fileName) {
+		if (xmlBasePath.startsWith("http:") || xmlBasePath.startsWith("https:")) {
+			try {
+				URL website = new URL(xmlBasePath + fileName);
+				File f = new File(tempPath + fileName);
+				try (ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+						FileOutputStream fos = new FileOutputStream(f.getAbsolutePath())) {
+					fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+				}
+				return f;
+			} catch (IOException e) {
+				log.error(e.getMessage(), e);
+			}
+		}
+		return new File(xmlBasePath + fileName);
 	}
 }
