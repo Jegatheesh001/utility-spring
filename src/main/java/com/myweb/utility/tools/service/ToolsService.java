@@ -33,6 +33,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import javax.imageio.ImageIO;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -42,8 +45,11 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.xml.sax.SAXException;
 
+import com.myweb.utility.tools.persistence.ToolsDao;
 import com.myweb.utility.trails.service.ImportDataFromExcel;
 
 /**
@@ -53,8 +59,9 @@ import com.myweb.utility.trails.service.ImportDataFromExcel;
  */
 @Service
 public class ToolsService {
-	
 	private static final Logger log = LoggerFactory.getLogger(ToolsService.class);
+	@Value("${api.xmlBasePath}")
+	private String xmlBasePath;
 
 	public String logicForImportDataFromExcel(String filePath) {
 		Workbook workbook = fetchExcelDocument(filePath);
@@ -475,5 +482,20 @@ public class ToolsService {
 	public void importFromExcelToTable(String tableName, Map<String, String> requestParam) {
 		excelService.importFromExcelToTable(tableName, requestParam);
 	}
-	
+
+	@Autowired
+	private ToolsDao dao;
+	public void readFromXMLForRemittance(String fileName) {
+		File inputFile = new File(xmlBasePath + fileName);
+		SAXParserFactory factory = SAXParserFactory.newInstance();
+		try {
+			SAXParser parser = factory.newSAXParser();
+			RemittanceSAXHandler handler = new RemittanceSAXHandler();
+			parser.parse(inputFile.toURI().toString(), handler);
+
+			dao.saveRemittanceDetails(handler.getClaimList(), fileName);
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			log.error(e.getMessage(), e);
+		}
+	}
 }

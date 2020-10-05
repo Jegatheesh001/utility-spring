@@ -94,4 +94,12 @@ public class ToolsController {
 	public void importFromExcelToTable(@PathVariable(name = "tableName") String tableName, @RequestParam Map<String, String> requestParam) {
 		toolsService.importFromExcelToTable(tableName, requestParam);
 	}
+	
+	@Loggable
+	@GetMapping("/readFromXML/{fileName}")
+	public void readFromXML(@PathVariable(name = "fileName") String fileNames) {
+		for (String fileName : fileNames.split(",")) {
+			toolsService.readFromXMLForRemittance(fileName);
+		}
+	}
 }
