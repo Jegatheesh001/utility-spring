@@ -521,4 +521,11 @@ public class ToolsService {
 		}
 		return new File(xmlBasePath + fileName);
 	}
+
+	public void readFromRemittance() {
+		File folderPath = new File(xmlBasePath);
+		for (final File fileEntry : folderPath.listFiles()) {
+			readFromXMLForRemittance(fileEntry.getName());
+		}
+	}
 }

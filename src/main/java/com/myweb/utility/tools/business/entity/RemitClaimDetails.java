@@ -25,7 +25,7 @@ public class RemitClaimDetails {
 	private Integer remitId;
 	private Integer remitClaimId;
 	private String claimNo;
-	private Integer activityId;
+	private String activityId;
 	private Integer activityType;
 	private String activityCode;
 	private Double netAmount;
@@ -38,7 +38,7 @@ public class RemitClaimDetails {
 		this.remitId = remitId;
 		this.remitClaimId = remitClaimId;
 		this.claimNo = (String) claimNo;
-		this.activityId = Integer.parseInt((String) activityId);
+		this.activityId = (String) activityId;
 		this.activityType = Integer.parseInt((String) activityType);
 		this.activityCode = (String) activityCode;
 		this.netAmount = Double.parseDouble((String) netAmount);

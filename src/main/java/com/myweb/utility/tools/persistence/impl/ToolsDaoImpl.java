@@ -37,7 +37,7 @@ public class ToolsDaoImpl implements ToolsDao {
 		for (Map<String, Object> claim : claimList) {
 			log.info("Current Element : {}", claim);
 			String claimNo = (String) claim.get("ID");
-			RemitClaims remitClaim = new RemitClaims(remitFile.getRemitId(), claimNo, (String) claim.get("Comments"));
+			RemitClaims remitClaim = new RemitClaims(remitFile.getRemitId(), claimNo, claim);
 			em.persist(remitClaim);
 			@SuppressWarnings("unchecked")
 			List<Map<String, Object>> activityList = (List<Map<String, Object>>) claim.getOrDefault("activityList", new ArrayList<>());

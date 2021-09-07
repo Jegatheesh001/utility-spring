@@ -1,5 +1,7 @@
 package com.myweb.utility.tools.business.entity;
 
+import java.util.Map;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,12 +26,18 @@ public class RemitClaims {
 	private Integer remitClaimId;
 	private Integer remitId;
 	private String claimNo;
+	private String providerId;
+	private String paymentReference;
+	private String settlementDate;
 	private String comments;
 	
-	public RemitClaims(Integer remitId, String claimNo, Object comments) {
+	public RemitClaims(Integer remitId, String claimNo, Map<String, Object> claim) {
 		super();
 		this.remitId = remitId;
 		this.claimNo = claimNo;
-		this.comments = (String) comments;
+		this.providerId = (String) claim.get("ProviderID");
+		this.paymentReference = (String) claim.get("PaymentReference");
+		this.settlementDate = (String) claim.get("DateSettlement");
+		this.comments = (String) claim.get("Comments");
 	}
 }

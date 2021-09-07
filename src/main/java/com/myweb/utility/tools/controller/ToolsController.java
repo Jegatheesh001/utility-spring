@@ -102,4 +102,10 @@ public class ToolsController {
 			toolsService.readFromXMLForRemittance(fileName);
 		}
 	}
+	
+	@Loggable
+	@GetMapping("/readFromXML/fromPath")
+	public void readFromRemittance() {
+		toolsService.readFromRemittance();
+	}
 }
