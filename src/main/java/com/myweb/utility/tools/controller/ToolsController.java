@@ -3,6 +3,7 @@ package com.myweb.utility.tools.controller;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,9 +24,11 @@ import com.myweb.utility.tools.service.ToolsService;
 @RestController
 @RequestMapping(value = "${context.name}/tools")
 public class ToolsController {
-
 	@Autowired
 	private ToolsService toolsService;
+	
+	@Value("${api.path.attachments}")
+	private String attachmentPath;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String welcome() {
@@ -107,5 +110,11 @@ public class ToolsController {
 	@GetMapping("/readFromXML/fromPath")
 	public void readFromRemittance() {
 		toolsService.readFromRemittance();
+	}
+	
+	@Loggable
+	@GetMapping("/readFilesFromFolder")
+	public String readFilesFromFolder() {
+		return toolsService.readAttachmentsFromFolder(attachmentPath);
 	}
 }

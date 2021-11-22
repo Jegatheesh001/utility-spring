@@ -29,9 +29,12 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -45,6 +48,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -527,5 +532,73 @@ public class ToolsService {
 		for (final File fileEntry : folderPath.listFiles()) {
 			readFromXMLForRemittance(fileEntry.getName());
 		}
+	}
+
+	public String readAttachmentsFromFolder(String folderPath) {
+		File folder = new File(folderPath);
+		StringJoiner fileBuilder = new StringJoiner("<br>");
+		Set<String> patients = new HashSet<>();
+		Set<String> docTypes = new HashSet<>();
+		
+		int rowNo = 0;
+		int colNo = 0;
+		
+		//Blank workbook
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		//Create a blank sheet
+        XSSFSheet sheet = workbook.createSheet("Attachments");
+        
+		for (final File patientFolder : folder.listFiles()) {
+			patients.add(patientFolder.getName());
+			if(!patientFolder.isDirectory()) {
+				continue;
+			}
+			for (final File docFolder : patientFolder.listFiles()) {
+				docTypes.add(docFolder.getName());
+				if(!docFolder.isDirectory()) {
+					continue;
+				}
+				for (final File fileEntry : docFolder.listFiles()) {
+					colNo = 0;
+					Row row = sheet.createRow(rowNo++);
+					Cell cell = row.createCell(colNo++);
+					cell.setCellValue(patientFolder.getName());
+					cell = row.createCell(colNo++);
+					cell.setCellValue(docFolder.getName());
+					cell = row.createCell(colNo);
+					cell.setCellValue(fileEntry.getAbsolutePath());
+					fileBuilder.add(fileEntry.getAbsolutePath());
+				}
+			}
+		}
+        
+		StringBuilder contentBuilder = new StringBuilder("--------- Patients -------------");
+		contentBuilder.append("<br>");
+		contentBuilder.append(patients.toString());
+		contentBuilder.append("<br><br>");
+		contentBuilder.append("--------- Document Types -------------");
+		contentBuilder.append("<br>");
+		contentBuilder.append(docTypes.toString());
+		contentBuilder.append("<br><br>");
+		contentBuilder.append("--------- Files -------------");
+		contentBuilder.append("<br>");
+		contentBuilder.append(fileBuilder.toString());
+		contentBuilder.append("<br>");
+		contentBuilder.append("-----------------------");
+		contentBuilder.append("<br>");
+		contentBuilder.append("File count: " + rowNo);
+		contentBuilder.append("<br><br>");
+		
+		try {
+            //Write the workbook in file system
+            FileOutputStream out = new FileOutputStream(new File(folderPath + "attachments.xlsx"));
+            workbook.write(out);
+            workbook.close();
+            out.close();
+            contentBuilder.append("File created successfully.");
+        } catch (Exception e) {
+        	contentBuilder.append("File creation failed. " + e.getMessage());
+        }
+		return contentBuilder.toString();
 	}
 }
