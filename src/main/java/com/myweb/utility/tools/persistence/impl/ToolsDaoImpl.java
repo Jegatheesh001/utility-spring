@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.myweb.utility.tools.business.entity.RemitClaimDetails;
@@ -22,11 +23,15 @@ import lombok.extern.slf4j.Slf4j;
            Created on <b>05-Oct-2020</b>
  *
  */
+@SuppressWarnings("unchecked")
 @Slf4j
 @Repository
 public class ToolsDaoImpl implements ToolsDao {
 	@PersistenceContext
 	EntityManager em;
+	
+	@Value("${spring.datasource.name}")
+	private String schemaName;
 	
 	@Transactional(rollbackOn = Exception.class)
 	@Override
@@ -39,7 +44,6 @@ public class ToolsDaoImpl implements ToolsDao {
 			String claimNo = (String) claim.get("ID");
 			RemitClaims remitClaim = new RemitClaims(remitFile.getRemitId(), claimNo, claim);
 			em.persist(remitClaim);
-			@SuppressWarnings("unchecked")
 			List<Map<String, Object>> activityList = (List<Map<String, Object>>) claim.getOrDefault("activityList", new ArrayList<>());
 			for (Map<String, Object> activity : activityList) {
 				em.persist(new RemitClaimDetails(remitFile.getRemitId(), remitClaim.getRemitClaimId(), claimNo,
@@ -47,6 +51,23 @@ public class ToolsDaoImpl implements ToolsDao {
 						activity.get("PaymentAmount"), activity.get("DenialCode")));
 			}
 		}
+	}
+
+	@Override
+	public List<String> getAllTables() {
+		return em.createNativeQuery("select TABLE_NAME from information_schema.tables where table_schema = :schemaName")
+				.setParameter("schemaName", schemaName).getResultList();
+	}
+
+	@Override
+	public List<String> getAllColumns(String tableName) {
+		return em.createNativeQuery("select COLUMN_NAME from information_schema.columns where table_schema = :schemaName and table_name = :tableName")
+				.setParameter("schemaName", schemaName).setParameter("tableName", tableName).getResultList();
+	}
+
+	@Override
+	public Number getDataCountForQuery(String tableName, String query) {
+		return (Number) em.createNativeQuery("select count(*) from " + tableName + " where " + query).getSingleResult();
 	}
 
 }

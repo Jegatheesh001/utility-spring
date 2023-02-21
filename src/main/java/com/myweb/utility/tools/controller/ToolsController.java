@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.myweb.utility.aspects.Loggable;
+import com.myweb.utility.tools.service.DatabaseSearch;
 import com.myweb.utility.tools.service.ToolsService;
 
 /**
@@ -26,6 +27,8 @@ import com.myweb.utility.tools.service.ToolsService;
 public class ToolsController {
 	@Autowired
 	private ToolsService toolsService;
+	@Autowired
+	private DatabaseSearch searchService;
 	
 	@Value("${api.path.attachments}")
 	private String attachmentPath;
@@ -116,5 +119,10 @@ public class ToolsController {
 	@GetMapping("/readFilesFromFolder")
 	public String readFilesFromFolder() {
 		return toolsService.readAttachmentsFromFolder(attachmentPath);
+	}
+	
+	@GetMapping("/searchData")
+	public String searchData() {
+		return searchService.searchData();
 	}
 }

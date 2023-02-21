@@ -11,5 +11,11 @@ import java.util.Map;
 public interface ToolsDao {
 
 	void saveRemittanceDetails(List<Map<String, Object>> claimList, String fileName);
+
+	List<String> getAllTables();
+
+	List<String> getAllColumns(String tableName);
+
+	Number getDataCountForQuery(String tableName, String query);
 	
 }
