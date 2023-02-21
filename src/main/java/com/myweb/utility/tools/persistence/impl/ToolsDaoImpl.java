@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
 import com.myweb.utility.tools.business.entity.RemitClaimDetails;
@@ -37,6 +38,14 @@ public class ToolsDaoImpl implements ToolsDao {
 	@Override
 	public void saveRemittanceDetails(List<Map<String, Object>> claimList, String fileName) {
 		log.info("File : {}", fileName);
+		/* Duplicate check */
+		long count = (long) em.createQuery("select count(*) from RemitFiles where remitFileName=:fileName")
+				.setParameter("fileName", fileName).getSingleResult();
+		if(count > 0) {
+			// throw new DataIntegrityViolationException("File already scanned from folder - " + fileName);
+			log.info("File already scanned from folder - {}", fileName);
+			return;
+		}
 		RemitFiles remitFile = new RemitFiles(fileName);
 		em.persist(remitFile);
 		for (Map<String, Object> claim : claimList) {
